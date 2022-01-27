@@ -1,17 +1,17 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import ColorBox from './ColorBox';
 
-function PalettePreview({paletteName, colors}) {
+function PalettePreview({paletteName, colors, onPress}) {
   const colorBoxes = colors
     .slice(0, 5)
     .map((color, index) => <ColorBox bgColor={color.hexCode} key={index} />);
 
   return (
-    <View style={styles.palette}>
+    <TouchableOpacity onPress={onPress} style={styles.palette}>
       <Text style={styles.paletteName}>{paletteName}</Text>
       <View style={styles.colorBoxes}>{colorBoxes}</View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

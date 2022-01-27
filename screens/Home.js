@@ -4,7 +4,7 @@ import PalettePreview from '../components/PalettePreview';
 
 const URL = 'https://color-palette-api.kadikraman.now.sh/palettes';
 
-function Home() {
+function Home({navigation}) {
   const [loading, setLoading] = useState(false);
   const [colorPalettes, setColorPalettes] = useState([]);
 
@@ -26,13 +26,21 @@ function Home() {
     fetchColorPalettes();
   }, []);
 
+  const goToColorPalette = item => {
+    navigation.navigate('ColorPalette', {palette: item});
+  };
+
   return (
     <FlatList
       style={styles.list}
       data={colorPalettes}
       keyExtractor={item => item.paletteName}
       renderItem={({item}) => (
-        <PalettePreview colors={item.colors} paletteName={item.paletteName} />
+        <PalettePreview
+          colors={item.colors}
+          paletteName={item.paletteName}
+          onPress={() => goToColorPalette(item)}
+        />
       )}
     />
   );
