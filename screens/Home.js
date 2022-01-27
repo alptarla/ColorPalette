@@ -8,22 +8,23 @@ function Home({navigation, route}) {
   const [loading, setLoading] = useState(false);
   const [colorPalettes, setColorPalettes] = useState([]);
 
+  const fetchColorPalettes = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const res = await fetch(URL);
+      const data = await res.json();
+      setColorPalettes(data);
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchColorPalettes = async () => {
-      setLoading(true);
-
-      try {
-        const res = await fetch(URL);
-        const data = await res.json();
-        setColorPalettes(data);
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchColorPalettes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const newPalette = route.params?.palette;
@@ -47,6 +48,8 @@ function Home({navigation, route}) {
         <Text style={styles.buttonText}>New Palette</Text>
       </TouchableOpacity>
       <FlatList
+        refreshing={loading}
+        onRefresh={fetchColorPalettes}
         style={styles.list}
         data={colorPalettes}
         keyExtractor={item => item.paletteName}
